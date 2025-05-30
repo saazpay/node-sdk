@@ -1,5 +1,11 @@
 # @saazpayhq/node-sdk
 
+## 0.0.3
+
+### Patch Changes
+
+- da87e70: removed dist from gitignore
+
 ## 0.0.2
 
 ### Patch Changes
