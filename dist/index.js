@@ -1,4 +1,4 @@
-import o from"jsonwebtoken";var e=process.env.SAAZPAY_SECRET_KEY,p=({appId:r,userId:n,expiresIn:t=60})=>{if(!e)throw new Error("Saazpay secret key is not defined");let s=`-----BEGIN PRIVATE KEY-----
-${e}
------END PRIVATE KEY-----`;return o.sign({userId:n,appId:r},s,{expiresIn:t,algorithm:"ES256"})};export{p as getAccessToken};
+import a from"jsonwebtoken";var s=process.env.SAAZPAY_CLIENT_KEY,i=process.env.SAAZPAY_BASE_URL,c=({appId:t,userId:e,expiresIn:r=60})=>{if(!s)throw new Error("Saazpay secret key is not defined");let n=`-----BEGIN PRIVATE KEY-----
+${s}
+-----END PRIVATE KEY-----`;return a.sign({userId:e,appId:t},n,{expiresIn:r,algorithm:"ES256"})},p=async({appId:t})=>{if(!i)throw new Error("Saazpay base URL is not defined");return await fetch(`${i}/api/v1/plans?id=${t}`,{method:"GET",headers:{"Content-Type":"application/json",Authorization:`Bearer ${process.env.SAAZPAY_API_KEY}`}}).then(r=>r.json()).catch(r=>(console.error(r),[]))},u=async({appId:t,userId:e})=>{if(!i)throw new Error("Saazpay base URL is not defined");return await fetch(`${i}/api/v1/subscriptions?appId=${t}&userId=${e}`,{method:"GET",headers:{"Content-Type":"application/json",Authorization:`Bearer ${process.env.SAAZPAY_API_KEY}`}}).then(n=>n.json()).catch(n=>(console.error(n),[]))};export{c as getAccessToken,u as getActiveSubscription,p as getPlans};
 //# sourceMappingURL=index.js.map

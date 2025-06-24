@@ -1,5 +1,11 @@
 # @saazpayhq/node-sdk
 
+## 0.0.4
+
+### Patch Changes
+
+- added endpoints for getting plans and active subscription
+
 ## 0.0.3
 
 ### Patch Changes
