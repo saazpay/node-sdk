@@ -1,5 +1,11 @@
 # @saazpayhq/node-sdk
 
+## 0.0.5
+
+### Patch Changes
+
+- ec0ef6e: added endpoints for management urls, preview plan and change plan
+
 ## 0.0.4
 
 ### Patch Changes
