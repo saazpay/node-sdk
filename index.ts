@@ -1,33 +1,4 @@
-import jwt from "jsonwebtoken";
-
-const secretKey: jwt.Secret | undefined = process.env.SAAZPAY_CLIENT_KEY;
 const baseUrl: string | undefined = process.env.SAAZPAY_BASE_URL;
-
-type TokenProps = {
-  appId: string;
-  userId?: string;
-  expiresIn?: number;
-};
-
-export const getAccessToken = ({
-  appId,
-  userId,
-  expiresIn = 60,
-}: TokenProps): string => {
-  if (!secretKey) {
-    throw new Error("Saazpay secret key is not defined");
-  }
-
-  const formattedPrivateKey = `-----BEGIN PRIVATE KEY-----\n${secretKey}\n-----END PRIVATE KEY-----`;
-  return jwt.sign(
-    {
-      userId,
-      appId,
-    },
-    formattedPrivateKey,
-    { expiresIn: expiresIn, algorithm: "ES256" }
-  );
-};
 
 export interface IPlan {
   id: string;
@@ -75,11 +46,10 @@ export const getPlans = async ({
   })
     .then((res) => res.json())
     .catch((err) => {
-      console.error(err);
-      return [];
+      return err;
     });
 
-  return res as IPlan[];
+  return res;
 };
 
 export interface ISubscription {
@@ -140,8 +110,123 @@ export const getActiveSubscription = async ({
   )
     .then((res) => res.json())
     .catch((err) => {
+      return err;
+    });
+
+  return res;
+};
+
+export interface IManagementUrl {
+  customerPortal: string;
+  cancelSubscription: string;
+  updatePaymentMethod: string;
+}
+export const getManagementUrls = async ({
+  appId,
+  subscriptionId,
+}: {
+  appId: string;
+  subscriptionId: string;
+}): Promise<IManagementUrl> => {
+  if (!baseUrl) {
+    throw new Error("Saazpay base URL is not defined");
+  }
+  const res = await fetch(
+    `${baseUrl}/api/v1/subscriptions/management?appId=${appId}&subscriptionId=${subscriptionId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.SAAZPAY_API_KEY}`,
+      },
+    }
+  )
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => {
       console.error(err);
-      return [];
+      return "";
+    });
+
+  return res;
+};
+
+export interface IProration {
+  currencyCode: string;
+  proratedCharge: number;
+  creditAmount: number;
+  subTotal: number;
+  tax: number;
+  discount: number;
+  creditApplied: number;
+  grandTotal: number;
+}
+
+export const previewPlan = async ({
+  subscriptionId,
+  newPlanId,
+  appId,
+}: {
+  subscriptionId: string;
+  newPlanId: string;
+  appId: string;
+}): Promise<IProration> => {
+  if (!baseUrl) {
+    throw new Error("Saazpay base URL is not defined");
+  }
+  const res = await fetch(
+    `${baseUrl}/api/v1/subscriptions/management/preview-plan?appId=${appId}&subscriptionId=${subscriptionId}&newPlanId=${newPlanId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.SAAZPAY_API_KEY}`,
+      },
+    }
+  )
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => {
+      return err;
+    });
+
+  return res;
+};
+
+export interface IUpdatePlan {
+  id: string;
+  status: string;
+}
+
+export const changePlan = async ({
+  subscriptionId,
+  newPlanId,
+  appId,
+}: {
+  subscriptionId: string;
+  newPlanId: string;
+  appId: string;
+}): Promise<IUpdatePlan> => {
+  if (!baseUrl) {
+    throw new Error("Saazpay base URL is not defined");
+  }
+  const res = await fetch(
+    `${baseUrl}/api/v1/subscriptions/management/change-plan?appId=${appId}&subscriptionId=${subscriptionId}&newPlanId=${newPlanId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.SAAZPAY_API_KEY}`,
+      },
+    }
+  )
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => {
+      return err;
     });
 
   return res;

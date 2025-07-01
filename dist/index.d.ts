@@ -1,9 +1,3 @@
-type TokenProps = {
-    appId: string;
-    userId?: string;
-    expiresIn?: number;
-};
-declare const getAccessToken: ({ appId, userId, expiresIn, }: TokenProps) => string;
 interface IPlan {
     id: string;
     price: number;
@@ -72,5 +66,38 @@ declare const getActiveSubscription: ({ appId, userId, }: {
     appId: string;
     userId: string;
 }) => Promise<ISubscription>;
+interface IManagementUrl {
+    customerPortal: string;
+    cancelSubscription: string;
+    updatePaymentMethod: string;
+}
+declare const getManagementUrls: ({ appId, subscriptionId, }: {
+    appId: string;
+    subscriptionId: string;
+}) => Promise<IManagementUrl>;
+interface IProration {
+    currencyCode: string;
+    proratedCharge: number;
+    creditAmount: number;
+    subTotal: number;
+    tax: number;
+    discount: number;
+    creditApplied: number;
+    grandTotal: number;
+}
+declare const previewPlanUpdate: ({ subscriptionId, newPlanId, appId, }: {
+    subscriptionId: string;
+    newPlanId: string;
+    appId: string;
+}) => Promise<IProration>;
+interface IUpdatePlan {
+    id: string;
+    status: string;
+}
+declare const changePlan: ({ subscriptionId, newPlanId, appId, }: {
+    subscriptionId: string;
+    newPlanId: string;
+    appId: string;
+}) => Promise<IUpdatePlan>;
 
-export { IPlan, IProduct, ISubscription, getAccessToken, getActiveSubscription, getPlans };
+export { IManagementUrl, IPlan, IProduct, IProration, ISubscription, IUpdatePlan, changePlan, getActiveSubscription, getManagementUrls, getPlans, previewPlanUpdate };
