@@ -94,7 +94,7 @@ export const getActiveSubscription = async ({
 }: {
   appId: string;
   userId: string;
-}): Promise<ISubscription> => {
+}): Promise<ISubscription | null> => {
   if (!baseUrl) {
     throw new Error("Saazpay base URL is not defined");
   }

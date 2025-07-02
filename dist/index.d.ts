@@ -65,7 +65,7 @@ interface ISubscriptionProduct {
 declare const getActiveSubscription: ({ appId, userId, }: {
     appId: string;
     userId: string;
-}) => Promise<ISubscription>;
+}) => Promise<ISubscription | null>;
 interface IManagementUrl {
     customerPortal: string;
     cancelSubscription: string;
@@ -85,7 +85,7 @@ interface IProration {
     creditApplied: number;
     grandTotal: number;
 }
-declare const previewPlanUpdate: ({ subscriptionId, newPlanId, appId, }: {
+declare const previewPlan: ({ subscriptionId, newPlanId, appId, }: {
     subscriptionId: string;
     newPlanId: string;
     appId: string;
@@ -100,4 +100,4 @@ declare const changePlan: ({ subscriptionId, newPlanId, appId, }: {
     appId: string;
 }) => Promise<IUpdatePlan>;
 
-export { IManagementUrl, IPlan, IProduct, IProration, ISubscription, IUpdatePlan, changePlan, getActiveSubscription, getManagementUrls, getPlans, previewPlanUpdate };
+export { IManagementUrl, IPlan, IProduct, IProration, ISubscription, IUpdatePlan, changePlan, getActiveSubscription, getManagementUrls, getPlans, previewPlan };

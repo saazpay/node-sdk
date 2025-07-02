@@ -1,5 +1,11 @@
 # @saazpayhq/node-sdk
 
+## 0.0.6
+
+### Patch Changes
+
+- fixed inactive subscription response
+
 ## 0.0.5
 
 ### Patch Changes
